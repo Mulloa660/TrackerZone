@@ -10,14 +10,22 @@ import java.io.FileReader;
 public class TrackerZone {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Transaction transaction = new Transaction();
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader("transactions.csv")) {
+            BufferedReader br = new BufferedReader(new FileReader("transactions.csv"));
+            while ((line = br.readLine()) != null) {
 
+
+                String[] parts = line.split("\\|");
+                int id = Integer.parseInt(parts[0]);
+                String name = parts[1];
+                double price = Double.parseDouble(parts[2]);
+                inventory.add(new
+
+                        transactions(id, name, price));
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.out.println("An error has occurred!");
         }
 
 
