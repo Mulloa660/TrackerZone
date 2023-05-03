@@ -91,8 +91,8 @@ public class TrackerZone {
     }
 
     private static void addDeposit(Scanner scanner) {
-        // :) This method should prompt the user to enter the date, time, vendor, and amount of a deposit.
-        // :) The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
+        // This method should prompt the user to enter the date, time, vendor, and amount of a deposit.
+        // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
         // The amount should be a positive number.
         // After validating the input, a new `Deposit` object should be created with the entered values.
         // The new deposit should be added to the `transactions` ArrayList.
@@ -110,13 +110,24 @@ public class TrackerZone {
             System.out.println("Amount (enter a positive amount):");
             double amount = scanner.nextDouble();
             scanner.nextLine();
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME));
+            Transaction text;
+            /*for (int i = 0; i <= transactions.size(); i++) {
+                text = text + transactions.get(i);
+                br.write(text);
+            }*/
+            for (Transaction entries : transactions) {
+                text = entries;
+                bw.write(String.valueOf(text));
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
             //LocalDate date, LocalTime time, String description, String vendor, double amount
             transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
-
-
-
-
-
 
     }
 
@@ -142,11 +153,6 @@ public class TrackerZone {
         scanner.nextLine();
         //LocalDate date, LocalTime time, String description, String vendor, double amount
         transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
-        try {
-            BufferedWriter br = new BufferedWriter(new FileWriter(FILE_NAME));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
     }
 
