@@ -109,25 +109,19 @@ public class TrackerZone {
             String vendor = scanner.nextLine();
             System.out.println("Amount (enter a positive amount):");
             double amount = scanner.nextDouble();
-            scanner.nextLine();
+
+            transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
+            String transaction = String.format("%s|%s|%s|%s|%.2f", fecha.format(DATE_FORMATTER),tiempo.format(TIME_FORMATTER), description,vendor,amount);
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME));
-            Transaction text;
-            /*for (int i = 0; i <= transactions.size(); i++) {
-                text = text + transactions.get(i);
-                br.write(text);
-            }*/
-            for (Transaction entries : transactions) {
-                text = entries;
-                bw.write(String.valueOf(text));
-                bw.newLine();
-            }
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME,true));
+            bw.write(transaction);
+            bw.newLine();
             bw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
             //LocalDate date, LocalTime time, String description, String vendor, double amount
-            transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
+
 
     }
 
