@@ -74,10 +74,10 @@ public class TrackerZone {
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split("\\|");
                 String date = parts[0];
-                //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                //fecha means date in spanish
                 LocalDate fecha = LocalDate.parse(date, DATE_FORMATTER);
                 String time = parts[1];
-                //DateTimeFormatter form = DateTimeFormatter.ofPattern("HH:mm:ss");
+                //tiempo means time in spanish
                 LocalTime tiempo = LocalTime.parse(time, TIME_FORMATTER);
                 String description = parts[2];
                 String vendor = parts[3];
@@ -120,7 +120,6 @@ public class TrackerZone {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-            //LocalDate date, LocalTime time, String description, String vendor, double amount
 
 
     }
@@ -145,8 +144,17 @@ public class TrackerZone {
         System.out.println("Amount (enter a negative number):");
         double amount = scanner.nextDouble();
         scanner.nextLine();
-        //LocalDate date, LocalTime time, String description, String vendor, double amount
+
         transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
+        String transaction = String.format("%s|%s|%s|%s|%.2f", fecha.format(DATE_FORMATTER),tiempo.format(TIME_FORMATTER), description,vendor,amount);
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME,true));
+            bw.write(transaction);
+            bw.newLine();
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -189,18 +197,36 @@ public class TrackerZone {
         // This method should display a table of all transactions in the `transactions` ArrayList.
         // The table should have columns for date, time, vendor, type, and amount.
         // The total balance of all transactions should be displayed at the bottom of the table.
+        for (int i = 0; i < transactions.size();i++)
+        {
+            System.out.println(transactions.get(i));
+        }
     }
 
     private static void displayDeposits() {
         // This method should display a table of all deposits in the `transactions` ArrayList.
         // The table should have columns for date, time, vendor, and amount.
         // The total amount of all deposits should be displayed at the bottom of the table.
-    }
+
+        for (int i = 0; i <= transactions.size();i++)
+        {
+            if (transactions.get(i).getAmount() > 0)
+                System.out.println(transactions);
+            }
+
+        }
+
 
     private static void displayPayments() {
         // This method should display a table of all payments in the `transactions` ArrayList.
         // The table should have columns for date, time, vendor, and amount.
         // The total amount of all payments should be displayed at the bottom of the table.
+        for (int i = 0; i <= transactions.size();i++)
+        {
+            if (transactions.get(i).getAmount() < 0)
+                System.out.println(transactions);
+        }
+
     }
 
     private static void reportsMenu(Scanner scanner) {
@@ -222,6 +248,7 @@ public class TrackerZone {
                     // Generate a report for all transactions within the current month,
                     // including the date, vendor, and amount for each transaction.
                     // The report should include a total of all transaction amounts for the month.
+                    
                 case "2":
                     // Generate a report for all transactions within the previous month,
                     // including the date, vendor, and amount for each transaction.
