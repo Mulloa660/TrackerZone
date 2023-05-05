@@ -1,11 +1,6 @@
 package com.learntocode;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -96,24 +91,24 @@ public class TrackerZone {
         // The amount should be a positive number.
         // After validating the input, a new `Deposit` object should be created with the entered values.
         // The new deposit should be added to the `transactions` ArrayList.
-            System.out.println("Enter the deposit information:");
-            System.out.println("Date (yyyy-mm-dd):");
-            String date = scanner.nextLine();
+        System.out.println("Enter the deposit information:");
+        System.out.println("Date (yyyy-mm-dd):");
+        String date = scanner.nextLine();
         LocalDate fecha = LocalDate.parse(date, DATE_FORMATTER);
-            System.out.println("Time (HH:mm:ss):");
-            String time = scanner.nextLine();
+        System.out.println("Time (HH:mm:ss):");
+        String time = scanner.nextLine();
         LocalTime tiempo = LocalTime.parse(time, TIME_FORMATTER);
-            System.out.println("Description:");
-            String description = scanner.nextLine();
-            System.out.println("Vendor:");
-            String vendor = scanner.nextLine();
-            System.out.println("Amount (enter a positive amount):");
-            double amount = scanner.nextDouble();
+        System.out.println("Description:");
+        String description = scanner.nextLine();
+        System.out.println("Vendor:");
+        String vendor = scanner.nextLine();
+        System.out.println("Amount (enter a positive amount):");
+        double amount = scanner.nextDouble();
 
-            transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
-            String transaction = String.format("%s|%s|%s|%s|%.2f", fecha.format(DATE_FORMATTER),tiempo.format(TIME_FORMATTER), description,vendor,amount);
+        transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
+        String transaction = String.format("%s|%s|%s|%s|%.2f", fecha.format(DATE_FORMATTER), tiempo.format(TIME_FORMATTER), description, vendor, amount);
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME,true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME, true));
             bw.write(transaction);
             bw.newLine();
             bw.close();
@@ -146,9 +141,9 @@ public class TrackerZone {
         scanner.nextLine();
 
         transactions.add(new Transaction(fecha, tiempo, description, vendor, amount));
-        String transaction = String.format("%s|%s|%s|%s|%.2f", fecha.format(DATE_FORMATTER),tiempo.format(TIME_FORMATTER), description,vendor,amount);
+        String transaction = String.format("%s|%s|%s|%s|%.2f", fecha.format(DATE_FORMATTER), tiempo.format(TIME_FORMATTER), description, vendor, amount);
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME,true));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME, true));
             bw.write(transaction);
             bw.newLine();
             bw.close();
@@ -197,9 +192,9 @@ public class TrackerZone {
         // This method should display a table of all transactions in the `transactions` ArrayList.
         // The table should have columns for date, time, vendor, type, and amount.
         // The total balance of all transactions should be displayed at the bottom of the table.
-        for (int i = 0; i < transactions.size();i++)
-        {
-            System.out.println(transactions.get(i));
+        System.out.println("Ledger:");
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction);
         }
     }
 
@@ -208,23 +203,25 @@ public class TrackerZone {
         // The table should have columns for date, time, vendor, and amount.
         // The total amount of all deposits should be displayed at the bottom of the table.
 
-        for (int i = 0; i <= transactions.size();i++)
-        {
-            if (transactions.get(i).getAmount() > 0)
-                System.out.println(transactions);
+        System.out.println("Deposits:");
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() > 0) {
+                System.out.println(transaction);
             }
-
         }
+
+    }
 
 
     private static void displayPayments() {
         // This method should display a table of all payments in the `transactions` ArrayList.
         // The table should have columns for date, time, vendor, and amount.
         // The total amount of all payments should be displayed at the bottom of the table.
-        for (int i = 0; i <= transactions.size();i++)
-        {
-            if (transactions.get(i).getAmount() < 0)
-                System.out.println(transactions);
+        System.out.println("Payments:");
+        for (Transaction transaction : transactions) {
+            if (transaction.getAmount() < 0) {
+                System.out.println(transaction);
+            }
         }
 
     }
@@ -248,20 +245,41 @@ public class TrackerZone {
                     // Generate a report for all transactions within the current month,
                     // including the date, vendor, and amount for each transaction.
                     // The report should include a total of all transaction amounts for the month.
-                    
+                    LocalDate now = LocalDate.now();
+                    for (Transaction transaction : transactions) {
+                        if (transaction.getDate().getMonth() == now.getMonth() && transaction.getDate().getYear() == now.getYear()) {
+                            System.out.println(transaction);
+                        }
+                    }
+
                 case "2":
                     // Generate a report for all transactions within the previous month,
                     // including the date, vendor, and amount for each transaction.
                     // The report should include a total of all transaction amounts for the month.
+                    LocalDate now2 = LocalDate.now();
+                    LocalDate earlier = now2.minusMonths(1);
+
+                    for (Transaction transaction : transactions) {
+                        if (transaction.getDate().getMonth() == earlier.getMonth() && transaction.getDate().getYear() == earlier.getYear()) {
+                            System.out.println(transaction);
+                        }
+                    }
                 case "3":
                     // Generate a report for all transactions within the current year,
                     // including the date, vendor, and amount for each transaction.
                     // The report should include a total of all transaction amounts for the year.
+                    LocalDate now3 = LocalDate.now();
+                    for (Transaction transaction : transactions) {
+                        if (transaction.getDate().getYear() == now3.getYear()) {
+                            System.out.println(transaction);
+                        }
+                    }
 
                 case "4":
                     // Generate a report for all transactions within the previous year,
                     // including the date, vendor, and amount for each transaction.
                     // The report should include a total of all transaction amounts for the year.
+
                 case "5":
                     // Prompt the user to enter a vendor name, then generate a report for all transactions
                     // with that vendor, including the date, vendor, and amount for each transaction.
